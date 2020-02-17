@@ -1,10 +1,12 @@
 <template>
     <div class="zong1">
-        <div>{{this.duixiang[0].name}}{{this.duixiang[0].gkp}}</div>
+        <h4 v-text="this.duixiang[0].name"></h4>
+        <h4 v-text="this.duixiang[0].gkp"></h4>
         <el-button type="primary" class="anniu1" @click="chouyici(info)">抽一次</el-button>
         <el-button type="primary" class="anniu2" @click="choushici(info)">抽十次</el-button>
+
+        <Xinfeng :xinfeng="xinfengxinxi" :chuhuo="xf_jieguo"></Xinfeng>
     </div>
-    
 </template>>
 
 <style scoped>
@@ -34,11 +36,18 @@
 
 
 <script>
+import Xinfeng from '../components/xinfeng';
   export default{
     name:"chouka",
     data(){
       return{
-        duixiang:[]
+        duixiang:[{name:"123",gkp:100}],
+        xinfengxinxi:{
+          show:false,
+          title:"",
+          rowid:""
+        },
+        xf_jieguo:""
       }
     },
     methods:{
@@ -54,11 +63,15 @@
           this.$axios.post("/api/users/choukayici",xinxi)
           .then((res) => {//显示结果 同步vuex
               console.log(res.data.jg+res.data.shitou);
-              xinxi.gkp = res.data.shitou;
+              xinxi.gkp = res.data.shitou;//这一行貌似是废的
+
+              this.xf_jieguo = res.data.jg;
+
               //console.log(xinxi);
               this.$store.dispatch("setUser",xinxi);
               this.getprofile();
           });
+          this.xinfengxinxi.show = true;
         }
       },
       choushici(xinxi){
@@ -93,6 +106,9 @@
         info(){
             return this.$store.getters.user;
         }
+    },
+    components:{
+        Xinfeng
     },
     created(){
       this.getprofile();
