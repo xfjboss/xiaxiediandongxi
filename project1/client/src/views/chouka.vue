@@ -51,7 +51,7 @@ import Xinfeng from '../components/xinfeng';
       }
     },
     methods:{
-      chouyici(xinxi){
+      async chouyici(xinxi){
         xinxi.gkp = this.duixiang[0].gkp;
         //console.log(xinxi)
         if(xinxi.gkp<=2){
@@ -60,8 +60,8 @@ import Xinfeng from '../components/xinfeng';
               message:"石头不足!"
           });
         }else{
-          this.$axios.post("/api/users/choukayici",xinxi)
-          .then((res) => {//显示结果 同步vuex
+          await this.$axios.post("/api/users/choukayici",xinxi)
+          .then((res) => {//显示结果 同步vuex 因为要最后显示页面，避免axios拦截动画与页面动画重复，所以用async await
               console.log(res.data.jg+res.data.shitou);
               xinxi.gkp = res.data.shitou;//这一行貌似是废的
 
@@ -71,7 +71,7 @@ import Xinfeng from '../components/xinfeng';
               this.$store.dispatch("setUser",xinxi);
               this.getprofile();
           });
-          this.xinfengxinxi.show = true;
+          this.xinfengxinxi.show = true;//我们希望这行最后执行，所以用async代码块
         }
       },
       choushici(xinxi){
