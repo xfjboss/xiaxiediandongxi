@@ -6,6 +6,7 @@
         <el-button type="primary" class="anniu2" @click="choushici(info)">抽十次</el-button>
 
         <Xinfeng :xinfeng="xinfengxinxi" :chuhuo="xf_jieguo"></Xinfeng>
+        <Xinfeng10 :xinfeng="xinfengxinxi10" :chuhuo="xf10_jieguo"></Xinfeng10>
     </div>
 </template>>
 
@@ -37,6 +38,7 @@
 
 <script>
 import Xinfeng from '../components/xinfeng';
+import Xinfeng10 from '../components/xinfeng_10';
   export default{
     name:"chouka",
     data(){
@@ -47,7 +49,13 @@ import Xinfeng from '../components/xinfeng';
           title:"",
           rowid:""
         },
-        xf_jieguo:""
+        xf_jieguo:"",
+        xinfengxinxi10:{
+          show:false,
+          title:"",
+          rowid:""
+        },
+        xf10_jieguo:[]
       }
     },
     methods:{
@@ -62,7 +70,7 @@ import Xinfeng from '../components/xinfeng';
         }else{
           await this.$axios.post("/api/users/choukayici",xinxi)
           .then((res) => {//显示结果 同步vuex 因为要最后显示页面，避免axios拦截动画与页面动画重复，所以用async await
-              console.log(res.data.jg+res.data.shitou);
+              //console.log(res.data.jg+res.data.shitou);
               xinxi.gkp = res.data.shitou;//这一行貌似是废的
 
               this.xf_jieguo = res.data.jg;
@@ -74,7 +82,7 @@ import Xinfeng from '../components/xinfeng';
           this.xinfengxinxi.show = true;//我们希望这行最后执行，所以用async代码块
         }
       },
-      choushici(xinxi){
+      async choushici(xinxi){
         xinxi.gkp = this.duixiang[0].gkp;
         if(xinxi.gkp<=29){
           this.$message({
@@ -82,14 +90,18 @@ import Xinfeng from '../components/xinfeng';
               message:"石头不足!"
           });
         }else{
-          this.$axios.post("/api/users/choukashici",xinxi)
+          await this.$axios.post("/api/users/choukashici",xinxi)
           .then((res) => {//显示结果 同步vuex
               console.log(res.data.jg+res.data.shitou);
               xinxi.gkp = res.data.shitou;
               //console.log(xinxi);
+
+              this.xf10_jieguo = res.data.jg;
+
               this.$store.dispatch("setUser",xinxi);
               this.getprofile();
           });
+          this.xinfengxinxi10.show = true;//我们希望这行最后执行，所以用async代码块
         }
       },
 
@@ -108,7 +120,8 @@ import Xinfeng from '../components/xinfeng';
         }
     },
     components:{
-        Xinfeng
+        Xinfeng,
+        Xinfeng10
     },
     created(){
       this.getprofile();

@@ -10,6 +10,8 @@ const users = require("./routers/api/users");
 const profiles = require("./routers/api/profile");
 //引入liwu
 const liwus = require("./routers/api/liwu");
+//引入dam
+const dam = require("./routers/api/dam");
 //db config
 const db = require("./config/keys").mongoURI;
 
@@ -35,6 +37,7 @@ require("./config/passport")(passport);
 app.use("/api/users",users);
 app.use("/api/profile",profiles);
 app.use("/api/liwu",liwus);
+app.use("/api/dam",dam);
 
 const port = process.env.port||5000;
 

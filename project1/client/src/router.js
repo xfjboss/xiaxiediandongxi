@@ -12,6 +12,7 @@ import gkpinfo from "./views/gkpinfo.vue";
 import gkpcharge from "./views/gkpcharge";
 import chouka from "./views/chouka";
 import cangku from "./views/cangku";
+import gonghuizhan from "./views/gonghuizhan";
 
 Vue.use(Router)
 const router = new Router({
@@ -35,7 +36,8 @@ const router = new Router({
         {path:'/gkpinfo',name:'gkpinfo',component:gkpinfo},
         {path:'/gkpcharge',name:'gkpcharge',component:gkpcharge},
         {path:'/chouka',name:'chouka',component:chouka},
-        {path:'/cangku',name:'cangku',component:cangku}
+        {path:'/cangku',name:'cangku',component:cangku},
+        {path:'/gonghuizhan',name:'gonghuizhan',component:gonghuizhan}
       ]
     },
     {

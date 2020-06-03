@@ -4,6 +4,7 @@
         :data="jubujiangpin"
         style="width: 100%"
         :default-sort = "{prop: 'date', order: 'descending'}"
+        @selection-change="handleSelectionChange"
         >
       <el-table-column
         prop="chouqu_time"
@@ -24,6 +25,10 @@
       </el-table-column>
 
       <el-table-column
+        type="selection"
+        width="55">
+      </el-table-column>
+      <el-table-column
         prop="operation"
         align='center'
         label="操作"
@@ -39,6 +44,9 @@
         </template>
       </el-table-column>
     </el-table>
+    
+    <el-button type="danger" round @click="handleAllDelete()" style="{float:right;margin:20px;}">删除全部选项</el-button>
+    <!--这里遇到个问题，上面那行的内联样式只会有一行生效而且有时会使按钮失去作用-->
     <el-row>
       <el-col :span="24">
           <div class="pagination">
@@ -62,6 +70,7 @@ import { Message } from 'element-ui';
     export default{
         data(){
           return {
+            multipleSelection:[],
             jubujiangpin:[],
             jiangpin:[],
             filterjiangpin:[],
@@ -120,6 +129,27 @@ import { Message } from 'element-ui';
               this.jubujiangpin = this.jiangpin.filter((item,index)=>{
                   return index < this.paginations.page_size;
               })
+          },
+          handleSelectionChange(val){
+            this.multipleSelection = val;
+          },
+          handleAllDelete(){
+            const idlist = []
+            if(this.multipleSelection != null){
+              for(var i=0;i<this.multipleSelection.length;i++){
+                idlist.push(this.multipleSelection[i]._id)
+              }
+              var params = new URLSearchParams();		
+              params.append('idlist',JSON.stringify(idlist));//传递数组要用json.stringify
+
+              this.$axios.post('/api/liwu/deleteAll',params)
+              .then(async res => {
+                await this.getprofile();
+                Message.success('删除成功！');
+              }).catch((err) => {});
+            }else{
+
+            }
           }
         },
         created(){

@@ -19,7 +19,7 @@ router.get("/liwuchaxun/:id",passport.authenticate("jwt",{session:false}),(req,r
 })
 
 //port DELETE api/liwu/delete/:id
-//desc  删除信息接口
+//desc  删除单个信息接口
 //access private
 
 router.delete("/delete/:id",passport.authenticate("jwt",{session:false}),(req,res)=>{
@@ -28,6 +28,29 @@ router.delete("/delete/:id",passport.authenticate("jwt",{session:false}),(req,re
     })
     .catch(err=>res.status(404).json("删除失败"));
 })
+
+
+//port DELETE api/liwu/deleteAll
+//desc  删除多个信息接口
+//access private
+router.post("/deleteAll",passport.authenticate("jwt",{session:false}),(req,res)=>{
+    const shanchulist = JSON.parse(req.body.idlist)
+    console.log(shanchulist);
+    console.log(typeof(shanchulist));
+    Liwu.remove({_id:{$in:shanchulist}})//remove 被弃用了
+    .then(liwu=>{
+        res.json(liwu);
+    })
+    .catch(err=>res.status(404).json(err));
+
+/*
+    Liwu.findOneAndRemove({_id:req.params.id}).then(liwu=>{
+        liwu.save().then(liwu=>res.json(liwu));
+    })
+    .catch(err=>res.status(404).json("删除失败"));
+    */
+})
+
 
 
 //port POST api/liwu/insert

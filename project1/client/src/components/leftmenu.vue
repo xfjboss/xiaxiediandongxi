@@ -79,6 +79,14 @@ export default{
                         {path:"chouka",name:"进入奖池"},
                         {path:"cangku",name:"我的仓库"}
                     ]
+                },
+                {
+                    icon: 'fa-server',
+                    name: '工会战记录',
+                    path: 'huizhan',
+                    children:[
+                        {path:"gonghuizhan",name:"工会战统计"}
+                    ]
                 }
             ]
         }
